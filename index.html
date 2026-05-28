@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-en="Cesar Links" data-ar="لينكات سيزار">لينكات سيزار</title>
-    <!-- استدعاء أيقونات FontAwesome للاستخدام في الأزرار -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* تعريف متغيرات الألوان لتسهيل التبديل بين المود الداكن والفاتح */
@@ -15,6 +14,7 @@
             --text-muted: #7b8893;
             --primary-neon: #00f0ff;
             --shadow-color: rgba(0, 240, 255, 0.3);
+            --meteor-color: rgba(0, 240, 255, 0.4); /* لون النيزك في الداكن */
         }
 
         [data-theme="light"] {
@@ -24,6 +24,7 @@
             --text-muted: #627282;
             --primary-neon: #008fa3;
             --shadow-color: rgba(0, 143, 163, 0.2);
+            --meteor-color: rgba(0, 143, 163, 0.3); /* لون النيزك في الفاتح */
         }
 
         * {
@@ -42,6 +43,47 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* حاوية النيازك في الخلفية */
+        .meteors-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ستايل النيزك الأساسي وحركته */
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 50px;
+            background: linear-gradient(to bottom, var(--meteor-color), transparent);
+            transform: rotate(-45deg);
+            animation: fall linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translate(0, 0) rotate(-45deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-300px, 300px) rotate(-45deg);
+                opacity: 0;
+            }
         }
 
         /* شريط التحكم العلوي */
@@ -52,6 +94,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
         }
 
         .brand-title {
@@ -81,6 +125,8 @@
         .profile-header {
             text-align: center;
             margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
         }
 
         .avatar-container {
@@ -124,6 +170,8 @@
             flex-direction: column;
             gap: 15px;
             margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
         }
 
         .link-card {
@@ -190,6 +238,8 @@
             font-size: 0.8rem;
             color: var(--text-muted);
             padding: 20px 0;
+            position: relative;
+            z-index: 1;
         }
 
         .footer-links {
@@ -211,37 +261,31 @@
 </head>
 <body>
 
-    <!-- الشريط العلوي للتحكم -->
+    <div class="meteors-container" id="meteorsContainer"></div>
+
     <div class="top-bar">
         <div class="brand-title" data-en="Cesar Links" data-ar="لينكات سيزار">لينكات سيزار</div>
         <div class="controls">
-            <!-- زر تغيير اللغة -->
             <button class="control-btn" id="langToggle">
                 <i class="fa-solid fa-globe"></i> <span id="langText">EN</span>
             </button>
-            <!-- زر تغيير المود (فاتح/داكن) -->
             <button class="control-btn" id="themeToggle">
                 <i class="fa-solid fa-moon"></i>
             </button>
         </div>
     </div>
 
-    <!-- الهيدر الشخصي -->
     <div class="profile-header">
         <div class="avatar-container">
-            <!-- استدعاء ملف الصورة المطلوب verbatim -->
             <img src="1001457044.png" alt="Cesar Store Logo">
         </div>
         <h1 class="main-title" data-en="Cesar Links" data-ar="لينكات سيزار">لينكات سيزار</h1>
         <p class="sub-title" data-en="The first store to buy and sell accounts" data-ar="المتجر الأول لبيع وشراء الحسابات">المتجر الأول لبيع وشراء الحسابات</p>
     </div>
 
-    <!-- أزرار الروابط المأخوذة من التصميم -->
     <div class="links-container">
 
-        <!-- الكارت الأول: جروب الواتس -->
         <div class="link-card">
-            <!-- زر الانضمام (الروابط مؤقتة # ويمكنك استبدالها بروابطك الحقيقية) -->
             <a href="https://whatsapp.com/temporary-link" target="_blank" class="join-btn">
                 <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
             </a>
@@ -252,7 +296,6 @@
             <i class="fa-solid fa-comment-dots link-icon"></i>
         </div>
 
-        <!-- الكارت الثاني: جروب الفيس -->
         <div class="link-card">
             <a href="https://facebook.com/temporary-link" target="_blank" class="join-btn">
                 <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
@@ -264,7 +307,6 @@
             <i class="fa-solid fa-users link-icon"></i>
         </div>
 
-        <!-- الكارت الثالث: التليجرام بيع وشراء -->
         <div class="link-card">
             <a href="https://t.me/temporary-link" target="_blank" class="join-btn">
                 <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
@@ -276,7 +318,6 @@
             <i class="fa-solid fa-paper-plane link-icon"></i>
         </div>
 
-        <!-- الكارت الرابع: قناة الشحن والعروض -->
         <div class="link-card">
             <a href="https://t.me/temporary-link-2" target="_blank" class="join-btn">
                 <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
@@ -290,7 +331,6 @@
 
     </div>
 
-    <!-- الفوتر السفلي المتواجد بالتصميم -->
     <div class="footer">
         <div class="footer-links">
             <a href="#" data-en="Terms" data-ar="الشروط">Terms</a>
@@ -300,9 +340,30 @@
         <div>&copy; 2024 .Cesar Store. All rights reserved</div>
     </div>
 
-    <!-- كود الجافا سكريبت لتفعيل الأزرار والمودات بدون توليد أخطاء -->
     <script>
-        // أولاً: تفعيل زر التبديل بين الـ Dark والـ Light Mode
+        // دالة لتوليد النيازك بشكل عشوائي في الخلفية
+        function createMeteors() {
+            const container = document.getElementById('meteorsContainer');
+            const meteorCount = 15; // يمكنك زيادة أو تقليل عدد النيازك من هنا
+
+            for (let i = 0; i < meteorCount; i++) {
+                const meteor = document.createElement('div');
+                meteor.classList.add('meteor');
+                
+                // توزيع عشوائي لأماكن البداية، السرعة، والوقت المستغرق
+                meteor.style.left = Math.random() * 100 + '%';
+                meteor.style.top = Math.random() * 50 + '%';
+                meteor.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                meteor.style.animationDelay = (Math.random() * 5) + 's';
+                
+                container.appendChild(meteor);
+            }
+        }
+        
+        // تشغيل النيازك فور تحميل الصفحة
+        createMeteors();
+
+        // تفعيل زر التبديل بين الـ Dark والـ Light Mode
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -315,7 +376,7 @@
             }
         });
 
-        // ثانياً: تفعيل زر تحويل اللغة (عربي / إنجليزي) بشكل ديناميكي
+        // تفعيل زر تحويل اللغة (عربي / إنجليزي) بشكل ديناميكي
         const langToggle = document.getElementById('langToggle');
         const langText = document.getElementById('langText');
         
@@ -324,7 +385,6 @@
             const translatableElements = document.querySelectorAll('[data-en][data-ar]');
 
             if (currentLang === 'ar') {
-                // التحويل للغة الإنجليزية
                 document.documentElement.setAttribute('lang', 'en');
                 document.documentElement.setAttribute('dir', 'ltr');
                 langText.textContent = 'AR';
@@ -333,7 +393,6 @@
                     el.textContent = el.getAttribute('data-en');
                 });
             } else {
-                // العودة للغة العربية
                 document.documentElement.setAttribute('lang', 'ar');
                 document.documentElement.setAttribute('dir', 'rtl');
                 langText.textContent = 'EN';
