@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-en="Cesar Links" data-ar="لينكات سيزار">لينكات سيزار</title>
+    <!-- استدعاء أيقونات FontAwesome للاستخدام في الأزرار -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* تعريف متغيرات الألوان لتسهيل التبديل بين المود الداكن والفاتح */
+        :root {
+            --bg-color: #0b0f14;
+            --card-bg: #121820;
+            --text-color: #ffffff;
+            --text-muted: #7b8893;
+            --primary-neon: #00f0ff;
+            --shadow-color: rgba(0, 240, 255, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --text-color: #1a202c;
+            --text-muted: #627282;
+            --primary-neon: #008fa3;
+            --shadow-color: rgba(0, 143, 163, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* شريط التحكم العلوي */
+        .top-bar {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-title {
+            color: var(--primary-neon);
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--shadow-color);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* قسم الهيدر والصورة الشخصية */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar-container {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-neon);
+            box-shadow: 0 0 20px var(--shadow-color);
+            margin: 0 auto 20px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--card-bg);
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .main-title {
+            color: var(--primary-neon);
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px var(--shadow-color);
+        }
+
+        .sub-title {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* قائمة الروابط والبطاقات */
+        .links-container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .link-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .link-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-grow: 1;
+            margin: 0 15px;
+        }
+
+        .link-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .link-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .link-icon {
+            font-size: 1.8rem;
+            color: var(--primary-neon);
+            opacity: 0.8;
+        }
+
+        /* زر الانضمام */
+        .join-btn {
+            background-color: var(--primary-neon);
+            color: #000000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 0 10px var(--shadow-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .join-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary-neon);
+        }
+
+        /* الفوتر والسفلي */
+        .footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding: 20px 0;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-neon);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الشريط العلوي للتحكم -->
+    <div class="top-bar">
+        <div class="brand-title" data-en="Cesar Links" data-ar="لينكات سيزار">لينكات سيزار</div>
+        <div class="controls">
+            <!-- زر تغيير اللغة -->
+            <button class="control-btn" id="langToggle">
+                <i class="fa-solid fa-globe"></i> <span id="langText">EN</span>
+            </button>
+            <!-- زر تغيير المود (فاتح/داكن) -->
+            <button class="control-btn" id="themeToggle">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- الهيدر الشخصي -->
+    <div class="profile-header">
+        <div class="avatar-container">
+            <!-- استدعاء ملف الصورة المطلوب verbatim -->
+            <img src="1001457044.png" alt="Cesar Store Logo">
+        </div>
+        <h1 class="main-title" data-en="Cesar Links" data-ar="لينكات سيزار">لينكات سيزار</h1>
+        <p class="sub-title" data-en="The first store to buy and sell accounts" data-ar="المتجر الأول لبيع وشراء الحسابات">المتجر الأول لبيع وشراء الحسابات</p>
+    </div>
+
+    <!-- أزرار الروابط المأخوذة من التصميم -->
+    <div class="links-container">
+
+        <!-- الكارت الأول: جروب الواتس -->
+        <div class="link-card">
+            <!-- زر الانضمام (الروابط مؤقتة # ويمكنك استبدالها بروابطك الحقيقية) -->
+            <a href="https://whatsapp.com/temporary-link" target="_blank" class="join-btn">
+                <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
+            </a>
+            <div class="link-info">
+                <span class="link-title" data-en="WhatsApp Accounts Group" data-ar="جروب بيع وشراء وتبديل حسابات الواتس">جروب بيع وشراء وتبديل حسابات الواتس 🎮</span>
+                <span class="link-desc" data-en="WhatsApp group under construction 🪓" data-ar="جروب الواتس تحت الانشاء 🪓">جروب الواتس تحت الانشاء 🪓</span>
+            </div>
+            <i class="fa-solid fa-comment-dots link-icon"></i>
+        </div>
+
+        <!-- الكارت الثاني: جروب الفيس -->
+        <div class="link-card">
+            <a href="https://facebook.com/temporary-link" target="_blank" class="join-btn">
+                <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
+            </a>
+            <div class="link-info">
+                <span class="link-title" data-en="Facebook Group +34k Members" data-ar="جروب الفيس +34 ألف عضو">جروب الفيس +34 ألف عضو👤</span>
+                <span class="link-desc" data-en="Sell • Buy • Trade Accounts 🎮" data-ar="بيع • شراء • تبديل حسابات 🎮">بيع • شراء • تبديل حسابات 🎮</span>
+            </div>
+            <i class="fa-solid fa-users link-icon"></i>
+        </div>
+
+        <!-- الكارت الثالث: التليجرام بيع وشراء -->
+        <div class="link-card">
+            <a href="https://t.me/temporary-link" target="_blank" class="join-btn">
+                <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
+            </a>
+            <div class="link-info">
+                <span class="link-title" data-en="Telegram Channel" data-ar="بيع • شراء • تبديل حسابات 🎮">بيع • شراء • تبديل حسابات 🎮</span>
+                <span class="link-desc" data-en="The official channel on Telegram" data-ar="القناة الرسمية على تليجرام">القناة الرسمية على تليجرام</span>
+            </div>
+            <i class="fa-solid fa-paper-plane link-icon"></i>
+        </div>
+
+        <!-- الكارت الرابع: قناة الشحن والعروض -->
+        <div class="link-card">
+            <a href="https://t.me/temporary-link-2" target="_blank" class="join-btn">
+                <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
+            </a>
+            <div class="link-info">
+                <span class="link-title" data-en="Shipping Channel • Offers • Giveaways ⚡" data-ar="قناة شحن • عروض • مسابقات ⚡">قناة شحن • عروض • مسابقات ⚡</span>
+                <span class="link-desc" data-en="Subscribe to get everything new" data-ar="اشترك ليصلك كل جديد">اشترك ليصلك كل جديد</span>
+            </div>
+            <i class="fa-solid fa-bullhorn link-icon"></i>
+        </div>
+
+    </div>
+
+    <!-- الفوتر السفلي المتواجد بالتصميم -->
+    <div class="footer">
+        <div class="footer-links">
+            <a href="#" data-en="Terms" data-ar="الشروط">Terms</a>
+            <a href="#" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a>
+            <a href="#" data-en="Support" data-ar="الدعم">Support</a>
+        </div>
+        <div>&copy; 2024 .Cesar Store. All rights reserved</div>
+    </div>
+
+    <!-- كود الجافا سكريبت لتفعيل الأزرار والمودات بدون توليد أخطاء -->
+    <script>
+        // أولاً: تفعيل زر التبديل بين الـ Dark والـ Light Mode
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            }
+        });
+
+        // ثانياً: تفعيل زر تحويل اللغة (عربي / إنجليزي) بشكل ديناميكي
+        const langToggle = document.getElementById('langToggle');
+        const langText = document.getElementById('langText');
+        
+        langToggle.addEventListener('click', () => {
+            const currentLang = document.documentElement.getAttribute('lang');
+            const translatableElements = document.querySelectorAll('[data-en][data-ar]');
+
+            if (currentLang === 'ar') {
+                // التحويل للغة الإنجليزية
+                document.documentElement.setAttribute('lang', 'en');
+                document.documentElement.setAttribute('dir', 'ltr');
+                langText.textContent = 'AR';
+                
+                translatableElements.forEach(el => {
+                    el.textContent = el.getAttribute('data-en');
+                });
+            } else {
+                // العودة للغة العربية
+                document.documentElement.setAttribute('lang', 'ar');
+                document.documentElement.setAttribute('dir', 'rtl');
+                langText.textContent = 'EN';
+                
+                translatableElements.forEach(el => {
+                    el.textContent = el.getAttribute('data-ar');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
