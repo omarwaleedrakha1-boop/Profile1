@@ -1,410 +1,164 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-en="Omar Links" data-ar="لينكات عمر">لينكات عمر</title>
+    <title>لينكات سيزار</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* تعريف متغيرات الألوان لتسهيل التبديل بين المود الداكن والفاتح */
-        :root {
-            --bg-color: #0b0f14;
-            --card-bg: #121820;
-            --text-color: #ffffff;
-            --text-muted: #7b8893;
-            --primary-neon: #00f0ff;
-            --shadow-color: rgba(0, 240, 255, 0.3);
-            --snow-color: rgba(255, 255, 255, 0.85); /* لون الثلج في الداكن */
-        }
-
-        [data-theme="light"] {
-            --bg-color: #f0f4f8;
-            --card-bg: #ffffff;
-            --text-color: #1a202c;
-            --text-muted: #627282;
-            --primary-neon: #008fa3;
-            --shadow-color: rgba(0, 143, 163, 0.2);
-            --snow-color: rgba(74, 85, 104, 0.4); /* لون الثلج في الفاتح */
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* حاوية تساقط الثلج في الخلفية وفوق الكلام */
-        .snow-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* تضمن إمكانية الضغط على الأزرار والكلام بالرغم من وجود الثلج فوقهم */
-            z-index: 9999; /* تم رفع الطبقة ليكون الثلج فوق كل شيء */
-        }
-
-        /* ستايل نديفة الثلج وحركتها للأسفل */
-        .snowflake {
-            position: absolute;
-            background-color: var(--snow-color);
-            border-radius: 50%;
-            animation: fall linear infinite;
-            opacity: 0.8;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-10px) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(105vh) translateX(20px);
-                opacity: 0;
-            }
-        }
-
-        /* شريط التحكم العلوي */
-        .top-bar {
-            width: 100%;
-            max-width: 480px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .brand-title {
-            color: var(--primary-neon);
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-shadow: 0 0 10px var(--shadow-color);
-        }
-
-        .controls {
-            display: flex;
-            gap: 15px;
-        }
-
-        .control-btn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* قسم الهيدر والصورة الشخصية */
-        .profile-header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .avatar-container {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            border: 3px solid var(--primary-neon);
-            box-shadow: 0 0 20px var(--shadow-color);
-            margin: 0 auto 20px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--card-bg);
-        }
-
-        .avatar-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .main-title {
-            color: var(--primary-neon);
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 5px;
-            text-shadow: 0 0 15px var(--shadow-color);
-        }
-
-        .sub-title {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* قائمة الروابط والبطاقات */
-        .links-container {
-            width: 100%;
-            max-width: 480px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .link-card {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .link-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex-grow: 1;
-            margin: 0 15px;
-        }
-
-        .link-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-        }
-
-        .link-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .link-icon {
-            font-size: 1.8rem;
-            color: var(--primary-neon);
-            opacity: 0.8;
-        }
-
-        /* زر الانضمام */
-        .join-btn {
-            background-color: var(--primary-neon);
-            color: #000000;
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 0 10px var(--shadow-color);
-            transition: transform 0.2s, box-shadow 0.2s;
-            white-space: nowrap;
-        }
-
-        .join-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--primary-neon);
-        }
-
-        /* الفوتر والسفلي */
-        .footer {
-            margin-top: auto;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            padding: 20px 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-neon);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="star-rain-container">
+    <div class="star-drop"></div>
+    <div class="star-drop"></div>
+    <div class="star-drop"></div>
+    <div class="star-drop"></div>
+    <div class="star-drop"></div>
+    <div class="star-drop"></div>
+    <div class="star-drop"></div>
+    <div class="star-drop"></div>
+    <div class="star-drop"></div>
+    <div class="star-drop"></div>
+</div>
 
-    <div class="snow-container" id="snowContainer"></div>
-
-    <div class="top-bar">
-        <div class="brand-title" data-en="Omar Links" data-ar="لينكات عمر">لينكات عمر</div>
-        <div class="controls">
-            <button class="control-btn" id="langToggle">
-                <i class="fa-solid fa-globe"></i> <span id="langText">EN</span>
+  <div class="top-controls">
+        <div class="controls-left-side">
+            <label class="theme-switch">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider">
+                    <i class="fas fa-moon" style="margin-left: 6px;"></i>
+                    <i class="fas fa-sun" style="margin-right: 6px;"></i>
+                </span>
+            </label>
+            
+            <button id="lang-toggle" class="language-switch" data-lang="ar">
+                <i class="fas fa-globe"></i>
+                <span id="lang-text">EN</span>
             </button>
-            <button class="control-btn" id="themeToggle">
-                <i class="fa-solid fa-moon"></i>
+        </div>
+        
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="ابحث عن الرابط الرئيسي هنا...">
+        </div>
+    </div>
+
+    <div class="profile">
+        <img src="cesar.jpg" alt="Cesar Logo" onerror="this.src='https://via.placeholder.com/120/121212/fefe33?text=Cesar'">
+<h1>لينكات سيزار</h1>
+    </div>
+
+<div id="links-container">
+        <div class="loading"><i class="fas fa-spinner fa-spin"></i> جاري تحميل الروابط الرئيسية...</div>
+    </div>
+
+<!-- زر الدعم الفني العائم -->
+    <button class="support-fixed-btn" id="fabMain">
+        <i class="fas fa-headset"></i>
+    </button>
+
+    <!-- صندوق الأرقام المنبثق الشفاف -->
+    <div class="support-popup" id="supportPopup">
+        <div class="support-popup-header">
+            <span>أرقام الدعم الفني</span>
+            <button class="close-popup" id="closePopup">
+                <i class="fas fa-times"></i>
             </button>
         </div>
+        <div class="support-popup-content" id="fabOptions">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> جاري جلب الأرقام...</div>
+        </div>
     </div>
 
-    <div class="profile-header">
-        <div class="avatar-container">
-            <img src="1001457044.png" alt="Omar Store Logo">
-        </div>
-        <h1 class="main-title" data-en="Omar Links" data-ar="لينكات عمر">لينكات عمر</h1>
-        <p class="sub-title" data-en="The first store to buy and sell accounts" data-ar="المتجر الأول لبيع وشراء الحسابات">المتجر الأول لبيع وشراء الحسابات</p>
-    </div>
-
-    <div class="links-container">
-
-        <div class="link-card">
-            <a href="https://whatsapp.com/temporary-link" target="_blank" class="join-btn">
-                <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
-            </a>
-            <div class="link-info">
-                <span class="link-title" data-en="WhatsApp Accounts Group" data-ar="جروب بيع وشراء وتبديل حسابات الواتس">جروب بيع وشراء وتبديل حسابات الواتس 🎮</span>
-                <span class="link-desc" data-en="WhatsApp group under construction 🪓" data-ar="جروب الواتس تحت الانشاء 🪓">جروب الواتس تحت الانشاء 🪓</span>
-            </div>
-            <i class="fa-solid fa-comment-dots link-icon"></i>
-        </div>
-
-        <div class="link-card">
-            <a href="https://facebook.com/temporary-link" target="_blank" class="join-btn">
-                <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
-            </a>
-            <div class="link-info">
-                <span class="link-title" data-en="Facebook Group +34k Members" data-ar="جروب الفيس +34 ألف عضو">جروب الفيس +34 ألف عضو👤</span>
-                <span class="link-desc" data-en="Sell • Buy • Trade Accounts 🎮" data-ar="بيع • شراء • تبديل حسابات 🎮">بيع • شراء • تبديل حسابات 🎮</span>
-            </div>
-            <i class="fa-solid fa-users link-icon"></i>
-        </div>
-
-        <div class="link-card">
-            <a href="https://t.me/temporary-link" target="_blank" class="join-btn">
-                <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
-            </a>
-            <div class="link-info">
-                <span class="link-title" data-en="Telegram Channel" data-ar="بيع • شراء • تبديل حسابات 🎮">بيع • شراء • تبديل حسابات 🎮</span>
-                <span class="link-desc" data-en="The official channel on Telegram" data-ar="القناة الرسمية على تليجرام">القناة الرسمية على تليجرام</span>
-            </div>
-            <i class="fa-solid fa-paper-plane link-icon"></i>
-        </div>
-
-        <div class="link-card">
-            <a href="https://t.me/temporary-link-2" target="_blank" class="join-btn">
-                <i class="fa-solid fa-user-plus"></i> <span data-en="Join" data-ar="انضم +">انضم +</span>
-            </a>
-            <div class="link-info">
-                <span class="link-title" data-en="Shipping Channel • Offers • Giveaways ⚡" data-ar="قناة شحن • عروض • مسابقات ⚡">قناة شحن • عروض • مسابقات ⚡</span>
-                <span class="link-desc" data-en="Subscribe to get everything new" data-ar="اشترك ليصلك كل جديد">اشترك ليصلك كل جديد</span>
-            </div>
-            <i class="fa-solid fa-bullhorn link-icon"></i>
-        </div>
-
-    </div>
-
-    <div class="footer">
-        <div class="footer-links">
-            <a href="#" data-en="Terms" data-ar="الشروط">Terms</a>
-            <a href="#" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a>
-            <a href="#" data-en="Support" data-ar="الدعم">Support</a>
-        </div>
-        <div>&copy; 2024 .Omar Store. All rights reserved</div>
-    </div>
+    <!-- زر التيك توك العائم (فوق الدعم مباشرة) -->
+    <a href="https://www.tiktok.com/@your_username" target="_blank" class="tiktok-fab">
+        <i class="fab fa-tiktok"></i>
+    </a>
 
     <script>
-        // دالة لتوليد رقاقات الثلج بشكل متناسق في الخلفية وفوق الكلام
-        function createSnow() {
-            const container = document.getElementById('snowContainer');
-            const flakeCount = 40; // يمكنك زيادة العدد من هنا لو تحب الثلج يكون أكثف
-
-            for (let i = 0; i < flakeCount; i++) {
-                const flake = document.createElement('div');
-                flake.classList.add('snowflake');
-                
-                // أحجام عشوائية لحبات الثلج لخلق عمق بصري
-                const size = Math.random() * 4 + 2; 
-                flake.style.width = size + 'px';
-                flake.style.height = size + 'px';
-                
-                // توزيع عشوائي للمواقع والسرعات
-                flake.style.left = Math.random() * 100 + '%';
-                flake.style.top = (Math.random() * -20) + '%'; 
-                flake.style.animationDuration = (Math.random() * 5 + 5) + 's'; 
-                flake.style.animationDelay = (Math.random() * 10) + 's';
-                
-                container.appendChild(flake);
-            }
-        }
+    // ================= حماية العميل (Client-Side Security) =================
+    (function() {
+        'use strict';
         
-        // تشغيل تأثير الثلج فوراً
-        createSnow();
+        // 1. تعطيل زر الفأرة الأيمن
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
 
-        // تفعيل زر التبديل بين الـ Dark والـ Light Mode
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'light') {
-                document.documentElement.removeAttribute('data-theme');
-                themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'light');
-                themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        // 2. تعطيل اختصارات لوحة المفاتيح الخطرة
+        const forbiddenKeys = [
+            { code: 'F12', ctrl: false, shift: false },
+            { code: 'KeyI', ctrl: true, shift: true },
+            { code: 'KeyJ', ctrl: true, shift: true },
+            { code: 'KeyU', ctrl: true, shift: false },
+            { code: 'KeyS', ctrl: true, shift: false },
+            { code: 'KeyP', ctrl: true, shift: false },
+            { code: 'KeyE', ctrl: true, shift: true }
+        ];
+
+        document.addEventListener('keydown', function(e) {
+            const isForbidden = forbiddenKeys.some(function(keyObj) {
+                return e.code === keyObj.code && 
+                       e.ctrlKey === keyObj.ctrl && 
+                       e.shiftKey === keyObj.shift;
+            });
+            
+            if (isForbidden) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
             }
-        });
+        }, true);
 
-        // تفعيل زر تحويل اللغة (عربي / إنجليزي) بشكل ديناميكي
-        const langToggle = document.getElementById('langToggle');
-        const langText = document.getElementById('langText');
-        
-        langToggle.addEventListener('click', () => {
-            const currentLang = document.documentElement.getAttribute('lang');
-            const translatableElements = document.querySelectorAll('[data-en][data-ar]');
+        // 3. Anti-Debugger - فحص间歇ي
+        let _debugLoop = setInterval(function() {
+            // فحص إذا كان الـ DevTools مفتوح
+            const _checkDevTools = function() {
+                // طريقة 1: فحص أبعاد النافذة
+                if (window.outerWidth - window.innerWidth > 150 || 
+                    window.outerHeight - window.innerHeight > 150) {
+                    // DevTools مفتوح
+                    debugger;
+                }
+                
+                // طريقة 2: فحص console
+                const _origConsole = console;
+                const _checkInterval = setInterval(function() {
+                    // إذا تغير console.warn يعني يوجد تجاوز
+                    if (console.warn.toString() !== _origConsole.warn.toString()) {
+                        debugger;
+                    }
+                }, 1000);
+                
+                return _checkInterval;
+            };
+            
+            // تشغيل الفحص
+            _checkDevTools();
+        }, 500);
 
-            if (currentLang === 'ar') {
-                document.documentElement.setAttribute('lang', 'en');
-                document.documentElement.setAttribute('dir', 'ltr');
-                langText.textContent = 'AR';
-                
-                translatableElements.forEach(el => {
-                    el.textContent = el.getAttribute('data-en');
-                });
-            } else {
-                document.documentElement.setAttribute('lang', 'ar');
-                document.documentElement.setAttribute('dir', 'rtl');
-                langText.textContent = 'EN';
-                
-                translatableElements.forEach(el => {
-                    el.textContent = el.getAttribute('data-ar');
-                });
-            }
-        });
+        // 4. حماية إضافية: منع نسخ النص
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+
+    })();
     </script>
+
+    <script src="script.js"></script>
 </body>
 </html>
