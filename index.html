@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-en="Cesar Links" data-ar="لينكات سيزار">لينكات سيزار</title>
+    <title data-en="Omar Links" data-ar="لينكات عمر">لينكات عمر</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* تعريف متغيرات الألوان لتسهيل التبديل بين المود الداكن والفاتح */
@@ -14,7 +14,7 @@
             --text-muted: #7b8893;
             --primary-neon: #00f0ff;
             --shadow-color: rgba(0, 240, 255, 0.3);
-            --meteor-color: rgba(0, 240, 255, 0.4); /* لون النيزك في الداكن */
+            --snow-color: rgba(255, 255, 255, 0.85); /* لون الثلج في الداكن */
         }
 
         [data-theme="light"] {
@@ -24,7 +24,7 @@
             --text-muted: #627282;
             --primary-neon: #008fa3;
             --shadow-color: rgba(0, 143, 163, 0.2);
-            --meteor-color: rgba(0, 143, 163, 0.3); /* لون النيزك في الفاتح */
+            --snow-color: rgba(74, 85, 104, 0.4); /* لون الثلج في الفاتح */
         }
 
         * {
@@ -47,41 +47,39 @@
             overflow-x: hidden;
         }
 
-        /* حاوية النيازك في الخلفية */
-        .meteors-container {
+        /* حاوية تساقط الثلج في الخلفية وفوق الكلام */
+        .snow-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; /* تضمن إمكانية الضغط على الأزرار والكلام بالرغم من وجود الثلج فوقهم */
+            z-index: 9999; /* تم رفع الطبقة ليكون الثلج فوق كل شيء */
         }
 
-        /* ستايل النيزك الأساسي وحركته */
-        .meteor {
+        /* ستايل نديفة الثلج وحركتها للأسفل */
+        .snowflake {
             position: absolute;
-            width: 2px;
-            height: 50px;
-            background: linear-gradient(to bottom, var(--meteor-color), transparent);
-            transform: rotate(-45deg);
+            background-color: var(--snow-color);
+            border-radius: 50%;
             animation: fall linear infinite;
-            opacity: 0;
+            opacity: 0.8;
         }
 
         @keyframes fall {
             0% {
-                transform: translate(0, 0) rotate(-45deg);
+                transform: translateY(-10px) translateX(0);
                 opacity: 0;
             }
             10% {
-                opacity: 1;
+                opacity: 0.8;
             }
             90% {
-                opacity: 1;
+                opacity: 0.8;
             }
             100% {
-                transform: translate(-300px, 300px) rotate(-45deg);
+                transform: translateY(105vh) translateX(20px);
                 opacity: 0;
             }
         }
@@ -261,10 +259,10 @@
 </head>
 <body>
 
-    <div class="meteors-container" id="meteorsContainer"></div>
+    <div class="snow-container" id="snowContainer"></div>
 
     <div class="top-bar">
-        <div class="brand-title" data-en="Cesar Links" data-ar="لينكات سيزار">لينكات سيزار</div>
+        <div class="brand-title" data-en="Omar Links" data-ar="لينكات عمر">لينكات عمر</div>
         <div class="controls">
             <button class="control-btn" id="langToggle">
                 <i class="fa-solid fa-globe"></i> <span id="langText">EN</span>
@@ -277,9 +275,9 @@
 
     <div class="profile-header">
         <div class="avatar-container">
-            <img src="1001457044.png" alt="Cesar Store Logo">
+            <img src="1001457044.png" alt="Omar Store Logo">
         </div>
-        <h1 class="main-title" data-en="Cesar Links" data-ar="لينكات سيزار">لينكات سيزار</h1>
+        <h1 class="main-title" data-en="Omar Links" data-ar="لينكات عمر">لينكات عمر</h1>
         <p class="sub-title" data-en="The first store to buy and sell accounts" data-ar="المتجر الأول لبيع وشراء الحسابات">المتجر الأول لبيع وشراء الحسابات</p>
     </div>
 
@@ -337,31 +335,36 @@
             <a href="#" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a>
             <a href="#" data-en="Support" data-ar="الدعم">Support</a>
         </div>
-        <div>&copy; 2024 .Cesar Store. All rights reserved</div>
+        <div>&copy; 2024 .Omar Store. All rights reserved</div>
     </div>
 
     <script>
-        // دالة لتوليد النيازك بشكل عشوائي في الخلفية
-        function createMeteors() {
-            const container = document.getElementById('meteorsContainer');
-            const meteorCount = 15; // يمكنك زيادة أو تقليل عدد النيازك من هنا
+        // دالة لتوليد رقاقات الثلج بشكل متناسق في الخلفية وفوق الكلام
+        function createSnow() {
+            const container = document.getElementById('snowContainer');
+            const flakeCount = 40; // يمكنك زيادة العدد من هنا لو تحب الثلج يكون أكثف
 
-            for (let i = 0; i < meteorCount; i++) {
-                const meteor = document.createElement('div');
-                meteor.classList.add('meteor');
+            for (let i = 0; i < flakeCount; i++) {
+                const flake = document.createElement('div');
+                flake.classList.add('snowflake');
                 
-                // توزيع عشوائي لأماكن البداية، السرعة، والوقت المستغرق
-                meteor.style.left = Math.random() * 100 + '%';
-                meteor.style.top = Math.random() * 50 + '%';
-                meteor.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                meteor.style.animationDelay = (Math.random() * 5) + 's';
+                // أحجام عشوائية لحبات الثلج لخلق عمق بصري
+                const size = Math.random() * 4 + 2; 
+                flake.style.width = size + 'px';
+                flake.style.height = size + 'px';
                 
-                container.appendChild(meteor);
+                // توزيع عشوائي للمواقع والسرعات
+                flake.style.left = Math.random() * 100 + '%';
+                flake.style.top = (Math.random() * -20) + '%'; 
+                flake.style.animationDuration = (Math.random() * 5 + 5) + 's'; 
+                flake.style.animationDelay = (Math.random() * 10) + 's';
+                
+                container.appendChild(flake);
             }
         }
         
-        // تشغيل النيازك فور تحميل الصفحة
-        createMeteors();
+        // تشغيل تأثير الثلج فوراً
+        createSnow();
 
         // تفعيل زر التبديل بين الـ Dark والـ Light Mode
         const themeToggle = document.getElementById('themeToggle');
